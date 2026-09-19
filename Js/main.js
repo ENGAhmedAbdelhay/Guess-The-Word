@@ -82,18 +82,18 @@ function generateInput() {
 
 
 const guessButton = document.querySelector(".check");
-guessButton.addEventListener("click", handleGuses);
+guessButton.addEventListener("click", handleGuesses);
 
-function handleGuses() {
+function handleGuesses() {
     let successGuess = true;
 
     for (let i = 1 ; i <= numberOfLetters; i++) {
 
         const inputField = document.querySelector(`#guess-${currentTry}-letter-${i}`);
         const letter = inputField.value.toLowerCase();
-        const actulaLetter = wordToGuess[i - 1];    
+        const actualLetter = wordToGuess[i - 1];    
 
-        if (letter === actulaLetter) {
+        if (letter === actualLetter) {
 
             inputField.classList.add("yes-in-place");
 
@@ -121,7 +121,7 @@ function handleGuses() {
     } else {
 
         document.querySelector(`.try-${currentTry}`).classList.add("disabled-inputs");
-        const currentTryInputs = document.querySelectorAll(`try-${currentTry} input`);
+        const currentTryInputs = document.querySelectorAll(`.try-${currentTry} input`);
         currentTryInputs.forEach((input) => (input.disabled = true));
         currentTry++;
         const nextTryInputs = document.querySelectorAll(`.try-${currentTry} input`); 
