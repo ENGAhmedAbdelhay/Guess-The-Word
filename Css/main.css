@@ -19,7 +19,8 @@ h1 {
 }
 .guess-game {
     text-align: center;
-    width: 1000px;
+    width: 80%;
+    max-width: 90%;
     margin: 20px auto;
     display: flex;
     align-items: flex-start;
@@ -161,6 +162,12 @@ h1 {
     }
     p {
         margin-top: 15px;
+    }
+}
+
+@media (max-width: 767px) {
+    .guess-game {
+        flex-direction: column;
     }
 }
 footer {
