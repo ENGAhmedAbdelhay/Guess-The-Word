@@ -5,6 +5,11 @@ document.title = gameName;
 document.querySelector("h1").innerHTML = gameName;
 document.querySelector("footer").innerHTML = `${gameName} Created By Ahmed Reda Abdelhay`;
 
+const successSound = new Audio('audio/success.mp3');
+const failSound = new Audio('audio/fail.wav');
+const inputaudio = new Audio('audio/inputaudio.wav');
+const have1ormore = new Audio('audio/have1ormore.mp3');
+
 let numberOfTries = 6;
 let numberOfLetters = 6;
 let currentTry = 1;
@@ -19,6 +24,7 @@ document.querySelector(`.hint span`).innerHTML = ` ${numberOfHints} `;
 const getHintButton = document.querySelector(".hint");
 getHintButton.addEventListener("click", getHint);
 
+inputaudio.volume = 0.5;
 function generateInput() {
 
     const inputsContainer = document.querySelector(".inputs");
@@ -56,7 +62,11 @@ function generateInput() {
             this.value = this.value.toUpperCase();
             const nextInput = inputs[index + 1]; 
     
-            if (nextInput) nextInput.focus();
+            if (nextInput){
+                    nextInput.focus();
+                    inputaudio.currentTime = 0;
+                    inputaudio.play();        
+                }
         });
     
         input.addEventListener("keydown", function(event){
@@ -65,13 +75,17 @@ function generateInput() {
             if (event.key === "ArrowRight") {
     
                 const nextInput = currentIndex + 1;
-    
+                    inputaudio.currentTime = 0;
+                    inputaudio.play();        
+
                 if (nextInput < inputs.length) inputs[nextInput].focus();
             }
     
             if (event.key === "ArrowLeft") {
     
                 const prevInput = currentIndex - 1;
+                    inputaudio.currentTime = 0;
+                    inputaudio.play();        
     
                 if (prevInput >= 0) inputs[prevInput].focus();
     
@@ -96,17 +110,17 @@ function handleGuesses() {
         if (letter === actualLetter) {
 
             inputField.classList.add("yes-in-place");
-
+            have1ormore.play();
+            
         }else if (wordToGuess.includes(letter) && letter !== "") {
 
             inputField.classList.add("not-in-place");
             successGuess = false;
-
+            
         }else {
 
             inputField.classList.add("no");
             successGuess = false;
-
         }
     }
 
@@ -117,9 +131,9 @@ function handleGuesses() {
         allTries.forEach((tryDiv) => tryDiv.classList.add("disabled-inputs"));
         guessButton.disabled = true;
         getHintButton.disabled = true;
-
+        setTimeout(() => successSound.play(), 500);
     } else {
-
+        
         document.querySelector(`.try-${currentTry}`).classList.add("disabled-inputs");
         const currentTryInputs = document.querySelectorAll(`.try-${currentTry} input`);
         currentTryInputs.forEach((input) => (input.disabled = true));
@@ -127,7 +141,7 @@ function handleGuesses() {
         const nextTryInputs = document.querySelectorAll(`.try-${currentTry} input`); 
         nextTryInputs.forEach((input) => (input.disabled = false));
         let el = document.querySelector(`.try-${currentTry}`)
-
+        
         if (el) {
             document.querySelector(`.try-${currentTry}`).classList.remove("disabled-inputs");
             el.children[1].focus();
@@ -137,6 +151,7 @@ function handleGuesses() {
             guessButton.disabled = true;
             getHintButton.disabled = true;
             messageArea.innerHTML = `You Losing The Game The Word is <span>${wordToGuess}</span>`
+            failSound.play();
 
         }
     }
