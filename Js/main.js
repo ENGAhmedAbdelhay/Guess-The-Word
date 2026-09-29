@@ -100,6 +100,7 @@ guessButton.addEventListener("click", handleGuesses);
 
 function handleGuesses() {
     let successGuess = true;
+    let hasAnyCorrectLetter = false;
 
     for (let i = 1 ; i <= numberOfLetters; i++) {
 
@@ -108,17 +109,16 @@ function handleGuesses() {
         const actualLetter = wordToGuess[i - 1];    
 
         if (letter === actualLetter) {
-
+            hasAnyCorrectLetter = true;
             inputField.classList.add("yes-in-place");
-            have1ormore.play();
             
         }else if (wordToGuess.includes(letter) && letter !== "") {
-
+            
             inputField.classList.add("not-in-place");
             successGuess = false;
             
         }else {
-
+            
             inputField.classList.add("no");
             successGuess = false;
         }
@@ -131,9 +131,16 @@ function handleGuesses() {
         allTries.forEach((tryDiv) => tryDiv.classList.add("disabled-inputs"));
         guessButton.disabled = true;
         getHintButton.disabled = true;
-        setTimeout(() => successSound.play(), 500);
-    } else {
-        
+        setTimeout(() => {
+            successSound.currentTime = 0;
+            successSound.play();
+        }, 300);
+        } else {
+
+        if (hasAnyCorrectLetter) {
+            have1ormore.currentTime = 0;
+            have1ormore.play();
+        }
         document.querySelector(`.try-${currentTry}`).classList.add("disabled-inputs");
         const currentTryInputs = document.querySelectorAll(`.try-${currentTry} input`);
         currentTryInputs.forEach((input) => (input.disabled = true));
@@ -151,6 +158,7 @@ function handleGuesses() {
             guessButton.disabled = true;
             getHintButton.disabled = true;
             messageArea.innerHTML = `You Losing The Game The Word is <span>${wordToGuess}</span>`
+            failSound.currentTime = 0;
             failSound.play();
 
         }
